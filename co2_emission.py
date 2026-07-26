@@ -93,6 +93,8 @@ actions = {
     }
 }
 
+selected_actions = {}
+
 for category_key, category_info in actions.items():
 
     if st.checkbox(category_info["label"]):
@@ -107,3 +109,18 @@ for category_key, category_info in actions.items():
                     step=1.0,
                     key=f"value_{category_key}_{item_key}"
                 )
+
+                selected_actions[item_key] = {
+                    "value": value,
+                    "factor": item_info["factor"],
+                    "label": item_info["label"],
+                    "unit": item_info["unit"]
+                }
+
+if st.button("계산하기"):
+    total = 0
+
+    for action in selected_actions.values():
+        total += action["value"] * action["factor"]
+
+    st.success(f"총 탄소 절감량 : {total:.2f} kgCO₂")
