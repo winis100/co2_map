@@ -2,41 +2,108 @@ import streamlit as st
 
 st.title("🌱 탄소 절감 계산기")
 
-# 1. 전기 절약
-electric = st.checkbox("⚡ 전기 절약")
-if electric:
-    electric_amount = st.number_input(
-        "절약한 전력(kWh)",
-        min_value=0.0,
-        step=0.1
-    )
+actions = {
+    "electric": {
+        "label": "⚡ 전기 절약",
+        "items": {
+            "air": {
+                "label": "에어컨",
+                "unit": "시간",
+                "factor": 0.8
+            },
+            "tv": {
+                "label": "TV",
+                "unit": "시간",
+                "factor": 0.1
+            },
+            "light": {
+                "label": "조명",
+                "unit": "시간",
+                "factor": 0.01
+            },
+            "computer": {
+                "label": "컴퓨터",
+                "unit": "시간",
+                "factor": 0.02
+            }
+        }
+    },
 
-# 2. 버스 이용
-bus = st.checkbox("🚌 자동차 대신 버스 타기")
-if bus:
-    bus_distance = st.number_input(
-        "버스로 이동한 거리(km)",
-        min_value=0.0,
-        step=0.5
-    )
+    "trans": {
+        "label": "🚗 운송",
+        "items": {
+            "car": {
+                "label": "자동차(휘발유)",
+                "unit": "km",
+                "factor": 0.02
+            },
+            "car_2": {
+                "label": "자동차(경유)",
+                "unit": "km",
+                "factor": 0.02
+            },
+            "plane": {
+                "label": "비행기",
+                "unit": "시간",
+                "factor": 0.03
+            }
+        }
+    },
 
-# 3. 채식
-vegan = st.checkbox("🥗 채식하기")
-if vegan:
-    vegan_meals = st.number_input(
-        "채식한 횟수(끼)",
-        min_value=0,
-        step=1
-    )
+    "meal": {
+        "label": "🥗 채식",
+        "items": {
+            "beef": {
+                "label": "소고기",
+                "unit": "g",
+                "factor": 0.03
+            },
+            "pork": {
+                "label": "돼지고기",
+                "unit": "g",
+                "factor": 0.01
+            },
+            "lamp": {
+                "label": "양",
+                "unit": "g",
+                "factor": 0.02
+            },
+            "chicken": {
+                "label": "닭",
+                "unit": "g",
+                "factor": 0.01
+            }
+        }
+    },
 
-# 4. 재활용
-recycle = st.checkbox("♻️ 재활용하기")
-if recycle:
-    recycle_count = st.number_input(
-        "재활용한 개수",
-        min_value=0,
-        step=1
-    )
+    "recycle": {
+        "label": "♻️ 재활용",
+        "items": {
+            "can": {
+                "label": "캔",
+                "unit": "개",
+                "factor": 0.02
+            },
+            "plastic_bottle": {
+                "label": "플라스틱 병",
+                "unit": "병",
+                "factor": 0.02
+            }
+        }
+    }
+}
 
-if st.button("계산하기"):
-    st.success("계산 기능은 다음 단계에서 추가!")
+for category_key, category_info in actions.items():
+
+    if st.checkbox(category_info["label"]):
+
+        for item_key, item_info in category_info["items"].items():
+
+            if st.checkbox(item_info["label"]):
+
+                value = st.number_input(
+                    f"{item_info['label']} ({item_info['unit']})",
+                    min_value=0.0,
+                    step=1.0,
+                    key=f"value_{category_key}_{item_key}"
+                )
