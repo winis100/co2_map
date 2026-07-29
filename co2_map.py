@@ -92,30 +92,90 @@ col1, col2, col3 = st.columns(3)
 with col1:
     year = st.selectbox(
         "년도",
-        [2020,2021,2022,2023,2024,2025,2026]
+        [2026,2025,2024,2023,2022,2021,2020]
     )
 
 with col2:
     energy = st.selectbox(
         "에너지원",
-        ["전기","가스","지역난방"]
+        ["전기","가스","지역난방", "전체"]
     )
 
 ## 데이터 로드
+# path = Path("온실가스 데이터")
+
+# df = pd.read_csv(path/f"{energy}_{year}.csv", skiprows=1)
+# df = df.rename(columns={"계": "1년 총합"})
+
+# ## 데이터 다 float으로 바꾸기
+# cols_df = df.columns[2:15]
+
+# for col in cols_df:
+#     df[col] = pd.to_numeric(
+#         df[col].astype(str).str.replace(",", "", regex=False),
+#         errors="coerce"
+#     )  
+
 path = Path("온실가스 데이터")
 
-df = pd.read_csv(path/f"{energy}_{year}.csv", skiprows=1)
-df = df.rename(columns={"계": "1년 총합"})
+if energy == "전체":
 
-## 데이터 다 float으로 바꾸기
-cols_df = df.columns[2:15]
+    df_list = []
 
-for col in cols_df:
-    df[col] = pd.to_numeric(
-        df[col].astype(str).str.replace(",", "", regex=False),
-        errors="coerce"
-    )  
+    for e in ["전기", "가스", "지역난방"]:
 
+        temp_df = pd.read_csv(
+            path/f"{e}_{year}.csv",
+            skiprows=1
+        )
+
+        temp_df = temp_df.rename(
+            columns={"계": "1년 총합"}
+        )
+
+        cols_df = temp_df.columns[2:15]
+
+        for col in cols_df:
+            temp_df[col] = pd.to_numeric(
+                temp_df[col]
+                .astype(str)
+                .str.replace(",", "", regex=False),
+                errors="coerce"
+            )
+
+        df_list.append(temp_df)
+
+
+    # 전기 데이터를 기준으로 시작
+    df = df_list[0].copy()
+
+    # 월별 데이터 합산
+    for col in cols_df:
+        df[col] = (
+            df_list[0][col]
+            + df_list[1][col]
+            + df_list[2][col]
+        )
+
+
+else:
+
+    df = pd.read_csv(
+        path/f"{energy}_{year}.csv",
+        skiprows=1
+    )
+
+    df = df.rename(columns={"계": "1년 총합"})
+
+    cols_df = df.columns[2:15]
+
+    for col in cols_df:
+        df[col] = pd.to_numeric(
+            df[col].astype(str)
+            .str.replace(",", "", regex=False),
+            errors="coerce"
+        )
+        
 # 선택 가능한 월 계산
 months = [
     "1월","2월","3월","4월",
