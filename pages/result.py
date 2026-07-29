@@ -2,6 +2,7 @@ import streamlit as st
 
 st.title("🌱 탄소 절감 결과")
 
+st.image("../house.png", use_container_width=True)
 
 if "result" not in st.session_state:
     st.warning("먼저 탄소 절감량을 계산해주세요.")
