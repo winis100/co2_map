@@ -42,7 +42,7 @@ year = st.selectbox(
 )
 energy = st.selectbox(
     "에너지원",
-    ["전기","가스","지역난방","전체"]
+    ["전기","가스","지역난방"]
 )
 month = st.selectbox(
     "월",
@@ -59,9 +59,6 @@ df = df.rename(columns={"계": "1년 총합"})
 
 ## 데이터 다 float으로 바꾸기
 cols_df = df.columns[2:15]
-
-## 전체 칼럼 만들기
-df["전체"] = df[["전기", "가스", "지역난방"]].sum(axis=1)
 
 for col in cols_df:
     df[col] = pd.to_numeric(
