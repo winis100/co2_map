@@ -89,6 +89,13 @@ recycle = { # 단위 = tCO2eq/t
     }
 }
 
+rooms = {
+    "거실": living_room,
+    "주방": kitchen,
+    "다용도실": laundry_room,
+    "재활용": recycle,
+}
+
 meal = {
     "beef": {
         "label": "소고기",
@@ -117,12 +124,42 @@ meal = {
     }
 }
 
-rooms = {
-    "거실": living_room,
-    "주방": kitchen,
-    "다용도실": laundry_room,
-    "재활용": recycle,
-    "식사": meal
+transportation = {
+    "sub": {
+        "label": "지하철",
+        "unit": "km",
+        "factor": 0.041
+    },
+    "bus": {
+        "label": "버스",
+        "unit": "km",
+        "factor": 0.089
+    },
+    "gas": {
+        "label": "휘발유차",
+        "unit": "km",
+        "factor": 0.192
+    },
+    "disel": {
+        "label": "경유차",
+        "unit": "km",
+        "factor": 0.21
+    },
+    "lpg": {
+        "label": "LPG차",
+        "unit": "km",
+        "factor": 0.197
+    },
+    "hybrid": {
+        "label": "하이브리드차",
+        "unit": "km",
+        "factor": 0.1
+    },
+    "electric": {
+        "label": "전기차",
+        "unit": "km",
+        "factor": 0.044
+    }
 }
 
 electric = {}
@@ -149,6 +186,69 @@ def create_inputs():
 
     return user_inputs
 
+def create_replacement():
+
+    user_inputs = {}
+
+    st.header("식사")
+
+    meal_labels = {
+        info["label"]: key
+        for key, info in meal.items()
+    }
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        selected = st.selectbox(
+            "평소식단",
+            meal_labels.keys()
+        )
+        user_inputs["평소식단"] = meal_labels[selected]
+
+    with col2:
+        selected = st.selectbox(
+            "오늘식단",
+            meal_labels.keys()
+        )
+        user_inputs["오늘식단"] = meal_labels[selected]
+
+    with col3:
+        user_inputs["섭취량"] = st.number_input(
+            "섭취량(g)",
+            min_value=0,
+            step=10
+        )
+
+    st.header("이동수단")
+
+    transportation_labels = {
+            info["label"]: key
+            for key, info in transportation.items()
+        }
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        selected = st.selectbox(
+            "평소 이동수단",
+            transportation.keys()
+        )
+        user_inputs["평소 이동수단"] = transportation_labels[selected]
+    
+    with col2:
+        selected = st.selectbox(
+            "오늘 이동수단",
+            transportation.keys()
+        )
+        user_inputs["오늘 이동수단"] = transportation_labels[selected]
+
+    with col3:
+        user_inputs["이동거리"] = st.number_input(
+            "이동거리(km)",
+            min_value=0,
+            step=1
+        )
+    return user_inputs
+
 def calculate_electric(user_inputs):
 
     total = 0
@@ -158,12 +258,6 @@ def calculate_electric(user_inputs):
         factor = info["factor"]
 
         total += value / 60 * factor * 0.4173 / 1000
-
-    return total
-
-def calculate_meal(user_inputs):
-
-    total = 0
 
     return total
 
@@ -177,10 +271,24 @@ def calculate_recycle(user_inputs):
 
     return total
 
+def calculate_replacement(user_inputs):
+
+    total = 0
+
+    before = user_inputs["평소식단"]
+    after = user_inputs["오늘식단"]
+    total += (meal[after]["factor"] - meal[before]["factor"]) * user_inputs["섭취량"] / 1000
+
+    before_t = user_inputs["평소 이동수단"]
+    after_t = user_inputs["오늘 이동수단"]
+    total += (transportation[after_t]["factor"] - transportation[before_t]["factor"]) * user_inputs["이동거리"] 
+
+    return total
+
 def calculate_total(user_inputs):
 
     electric = calculate_electric(user_inputs)
-    meal = calculate_meal(user_inputs)
+    meal = calculate_replacement(user_inputs)
     recycle = calculate_recycle(user_inputs)
 
     total = electric + meal - recycle
@@ -191,7 +299,10 @@ def show_result(total):
 
     st.success(f"총 탄소배출량 : {total*1000:.2f} kgCO₂")
 
-user_inputs = create_inputs()
+user_inputs = {}
+
+user_inputs.update(create_inputs())
+user_inputs.update(create_replacement())
 
 if st.button("탄소배출량 계산"):
 
