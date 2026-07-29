@@ -25,7 +25,7 @@ def draw_map(merged, month):
     ).add_to(m)
 
     tooltip=folium.GeoJsonTooltip(
-        fields=["SIG_KOR_NM", month, "CO2"],
+        fields=["SIG_KOR_NM", month],
         aliases=[
             "자치구",
             f"{month} CO2 배출량(tCO2eq)"
