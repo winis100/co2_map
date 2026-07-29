@@ -101,14 +101,6 @@ with col2:
         ["전기","가스","지역난방"]
     )
 
-with col3:
-    month = st.selectbox(
-        "월",
-        ["1월","2월","3월","4월",
-         "5월","6월","7월","8월",
-         "9월","10월","11월","12월","1년 총합"]
-    )
-
 ## 데이터 로드
 path = Path("온실가스 데이터")
 
@@ -123,6 +115,30 @@ for col in cols_df:
         df[col].astype(str).str.replace(",", "", regex=False),
         errors="coerce"
     )  
+
+# 선택 가능한 월 계산
+months = [
+    "1월","2월","3월","4월",
+    "5월","6월","7월","8월",
+    "9월","10월","11월","12월",
+    "1년 총합"
+]
+
+available_months = []
+
+for m in months:
+    if m == "1년 총합":
+        available_months.append(m)
+    elif df[m].sum() != 0:
+        available_months.append(m)
+
+
+# 월 선택
+with col3:
+    month = st.selectbox(
+        "월",
+        available_months
+    )
 
 ## 지도 데이터와 합치기
 merged = seoul.merge(
