@@ -292,8 +292,8 @@ def calculate_replacement(user_inputs):
 def calculate_total(user_inputs):
 
     electric = calculate_electric(user_inputs) * 1000
-    replacement = calculate_replacement(user_inputs) * 1000
-    recycle = calculate_recycle(user_inputs)
+    replacement = calculate_replacement(user_inputs) 
+    recycle = calculate_recycle(user_inputs) * 1000
 
     total = electric + replacement + recycle
 
