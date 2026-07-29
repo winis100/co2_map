@@ -31,6 +31,28 @@ def draw_map(merged, month):
         legend_name=f"{month} CO₂ 배출량"
     ).add_to(m)
 
+    for _, row in merged.iterrows():
+        point = row.geometry.representative_point()
+    
+        folium.Marker(
+            location=[
+                point.y,
+                point.x
+            ],
+            icon=folium.DivIcon(
+                html=f"""
+                <div style="
+                    font-size:12px;
+                    font-weight:bold;
+                    color:black;
+                    text-align:center;
+                ">
+                    {row['SIG_KOR_NM']}
+                </div>
+                """
+            )
+        ).add_to(m)
+
     tooltip=folium.GeoJsonTooltip(
         fields=["SIG_KOR_NM", month],
         aliases=[
