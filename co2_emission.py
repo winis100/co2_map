@@ -281,11 +281,11 @@ def calculate_replacement(user_inputs):
 
     before = user_inputs["평소식단"]
     after = user_inputs["오늘식단"]
-    total += (meal[after]["factor"] - meal[before]["factor"]) * user_inputs["섭취량"] / 1000
+    total += (meal[before]["factor"] - meal[after]["factor"]) * user_inputs["섭취량"] / 1000
 
     before_t = user_inputs["평소 이동수단"]
     after_t = user_inputs["오늘 이동수단"]
-    total += (transportation[after_t]["factor"] - transportation[before_t]["factor"]) * user_inputs["이동거리"] 
+    total += (transportation[before_t]["factor"] - transportation[after_t]["factor"]) * user_inputs["이동거리"] 
 
     return total # (kgCO2/kg) * g / 1000 -> kgCO2
 
