@@ -176,13 +176,17 @@ def create_inputs():
 
         st.header(room_name)
 
-        for key, info in room.items():
+        cols = st.columns(3)
 
-            user_inputs[key] = st.number_input(
-                f'{info["label"]} ({info["unit"]})',
-                min_value=0,
-                key=key
-            )
+        for idx, (key, info) in enumerate(room.items()):
+
+            with cols[idx % 3]:
+
+                user_inputs[key] = st.number_input(
+                    f'{info["label"]} ({info["unit"]})',
+                    min_value=0,
+                    key=key
+                )
 
     return user_inputs
 
