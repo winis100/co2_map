@@ -3,13 +3,13 @@ import os
 
 st.title("🌱 탄소 절감 결과")
 
-image_path = os.path.join(
-    os.path.dirname(__file__),
-    "..",
-    "house.png"
-)
+# image_path = os.path.join(
+#     os.path.dirname(__file__),
+#     "..",
+#     "house.png"
+# )
 
-st.image(image_path, use_container_width=True)
+# st.image(image_path, use_container_width=True)
 
 if "result" not in st.session_state:
     st.warning("먼저 탄소 절감량을 계산해주세요.")

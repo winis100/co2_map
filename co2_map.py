@@ -24,6 +24,21 @@ def draw_map(merged, month):
         legend_name=f"{month} CO₂ 배출량"
     ).add_to(m)
 
+    tooltip=folium.GeoJsonTooltip(
+        fields=["SIG_KOR_NM", month, "CO2"],
+        aliases=[
+            "자치구",
+            "전력사용량(MWh)",
+            "CO₂ 배출량(tCO₂eq)"
+        ],
+        localize=True
+    )
+    
+    folium.GeoJson(
+        merged,
+        tooltip=tooltip
+    ).add_to(m)
+
     return m
 
 ## 탄소가스 배출량 데이터 가져오기
