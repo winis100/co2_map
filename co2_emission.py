@@ -291,7 +291,7 @@ def calculate_total(user_inputs):
     meal = calculate_replacement(user_inputs)
     recycle = calculate_recycle(user_inputs)
 
-    total = electric + meal - recycle
+    total = electric + meal + recycle
 
     return total
 
@@ -310,9 +310,10 @@ user_inputs["실천기간"] = st.number_input(
     step=1
 )
 
-if st.button("탄소배출량 계산"):
+if st.button("탄소절감량 계산"):
 
     total = calculate_total(user_inputs)
     total_reduction = total * user_inputs["실천기간"]
+    st.session_state["total"] = total_reduction
 
-    show_result(total_reduction)
+    st.switch_page("pages/result.py")
