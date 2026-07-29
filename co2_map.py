@@ -46,6 +46,9 @@ def draw_map(merged, month):
                     font-weight:bold;
                     color:black;
                     text-align:center;
+                    white-space: nowrap;
+                    width: 80px;
+                    transform: translate(-40px, -10px);
                 ">
                     {row['SIG_KOR_NM']}
                 </div>
