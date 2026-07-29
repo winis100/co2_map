@@ -10,7 +10,9 @@ def draw_map(merged, month):
 
     m = folium.Map(
         location=[37.5665,126.9780],
-        zoom_start=11
+        zoom_start=11,
+        min_zoom=10,
+        max_zoom=14
     )
 
     folium.Choropleth(
@@ -35,7 +37,12 @@ def draw_map(merged, month):
 
     folium.GeoJson(
         merged,
-        tooltip=tooltip
+        tooltip=tooltip,
+        style_function=lambda x: {
+            "color": "black",
+            "weight": 0.5,
+            "fillOpacity": 0
+        }
     ).add_to(m)
 
     return m
