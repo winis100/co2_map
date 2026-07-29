@@ -18,7 +18,7 @@ def draw_map(merged, month):
         data=merged,
         columns=["자치구명", month],
         key_on="feature.properties.SIG_KOR_NM",
-        fill_color="YlOrRd",
+        fill_color="YlGn",
         fill_opacity=0.8,
         line_opacity=0.2,
         legend_name=f"{month} CO₂ 배출량"
@@ -33,7 +33,7 @@ def draw_map(merged, month):
         ],
         localize=True
     )
-    
+
     folium.GeoJson(
         merged,
         tooltip=tooltip
