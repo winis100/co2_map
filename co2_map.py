@@ -4,6 +4,10 @@ import geopandas as gpd
 
 seoul = gpd.read_file("서울_자치구_경계_2017.geojson")
 
+seoul["geometry"] = seoul["geometry"].simplify(
+    tolerance=0.001
+)
+
 ## 지도 그리는 함수
 import folium
 def draw_map(merged, month):
@@ -11,6 +15,7 @@ def draw_map(merged, month):
     m = folium.Map(
         location=[37.5665,126.9780],
         zoom_start=11,
+        tiles="CartoDB positron",
         min_zoom=10,
         max_zoom=14
     )
