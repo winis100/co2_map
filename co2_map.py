@@ -28,8 +28,7 @@ def draw_map(merged, month):
         fields=["SIG_KOR_NM", month, "CO2"],
         aliases=[
             "자치구",
-            "전력사용량(MWh)",
-            "CO₂ 배출량(tCO₂eq)"
+            f"{month} CO2 배출량(tCO2eq)"
         ],
         localize=True
     )
