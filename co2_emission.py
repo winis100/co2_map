@@ -230,14 +230,14 @@ def create_replacement():
     with col1:
         selected = st.selectbox(
             "평소 이동수단",
-            transportation.keys()
+            transportation_labels.keys()
         )
         user_inputs["평소 이동수단"] = transportation_labels[selected]
     
     with col2:
         selected = st.selectbox(
             "오늘 이동수단",
-            transportation.keys()
+            transportation_labels.keys()
         )
         user_inputs["오늘 이동수단"] = transportation_labels[selected]
 
