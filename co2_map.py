@@ -62,20 +62,27 @@ from streamlit_folium import st_folium
 
 ## streamlit으로 먼저 뼈대 만들기
 st.title("서울 탄소 배출 지도")
-year = st.selectbox(
-    "년도",
-    [2020,2021,2022,2023,2024,2025, 2026]
-)
-energy = st.selectbox(
-    "에너지원",
-    ["전기","가스","지역난방"]
-)
-month = st.selectbox(
-    "월",
-    ["1월","2월","3월","4월",
-     "5월","6월","7월","8월",
-     "9월","10월","11월","12월","1년 총합"]
-)
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    year = st.selectbox(
+        "년도",
+        [2020,2021,2022,2023,2024,2025,2026]
+    )
+
+with col2:
+    energy = st.selectbox(
+        "에너지원",
+        ["전기","가스","지역난방"]
+    )
+
+with col3:
+    month = st.selectbox(
+        "월",
+        ["1월","2월","3월","4월",
+         "5월","6월","7월","8월",
+         "9월","10월","11월","12월","1년 총합"]
+    )
 
 ## 데이터 로드
 path = Path("온실가스 데이터")
