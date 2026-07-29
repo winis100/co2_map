@@ -304,8 +304,15 @@ user_inputs = {}
 user_inputs.update(create_inputs())
 user_inputs.update(create_replacement())
 
+user_inputs["실천기간"] = st.number_input(
+    "실천 기간(일)",
+    min_value=1,
+    step=1
+)
+
 if st.button("탄소배출량 계산"):
 
     total = calculate_total(user_inputs)
+    total_reduction = total * user_inputs["실천기간"]
 
-    show_result(total)
+    show_result(total_reduction)
