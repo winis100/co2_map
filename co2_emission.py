@@ -257,7 +257,7 @@ def calculate_electric(user_inputs):
         value = user_inputs[key]
         factor = info["factor"]
 
-        total += value / 60 * factor * 0.4173 / 1000
+        total += value / 60 * factor * 0.4173 / 1000 # (분 / 60) * 시간당 kw * tCO2eq/MWh /1000 -> tCO2eq 
 
     return total
 
@@ -265,7 +265,7 @@ def calculate_recycle(user_inputs):
 
     total = 0
 
-    total += user_inputs["can"] * recycle["can"]["factor"] * 11 /1000000
+    total += user_inputs["can"] * recycle["can"]["factor"] * 11 /1000000 # 개수 * tCO2eq/t * 한 개당 g / 10^6 -> tCO2eq
     total += user_inputs["glass"] * recycle["glass"]["factor"] * 400 / 1000000
     total += user_inputs["plastic"] * recycle["plastic"]["factor"] * 15 / 1000000
 
@@ -283,21 +283,26 @@ def calculate_replacement(user_inputs):
     after_t = user_inputs["오늘 이동수단"]
     total += (transportation[after_t]["factor"] - transportation[before_t]["factor"]) * user_inputs["이동거리"] 
 
-    return total
+    return total # (kgCO2/kg) * g / 1000 -> kgCO2
 
 def calculate_total(user_inputs):
 
-    electric = calculate_electric(user_inputs)
-    meal = calculate_replacement(user_inputs)
+    electric = calculate_electric(user_inputs) * 1000
+    replacement = calculate_replacement(user_inputs) * 1000
     recycle = calculate_recycle(user_inputs)
 
-    total = electric + meal + recycle
+    total = electric + replacement + recycle
 
-    return total
+    return {
+        "electric": electric,
+        "replacement": replacement,
+        "recycle": recycle,
+        "total": total
+    } # kgCO2eq
 
 def show_result(total):
 
-    st.success(f"총 탄소배출량 : {total*1000:.2f} kgCO₂")
+    st.success(f"총 탄소배출량 : {total:.2f} kgCO₂")
 
 user_inputs = {}
 
@@ -312,8 +317,15 @@ user_inputs["실천기간"] = st.number_input(
 
 if st.button("탄소절감량 계산"):
 
-    total = calculate_total(user_inputs)
-    total_reduction = total * user_inputs["실천기간"]
-    st.session_state["total"] = total_reduction
+    result = calculate_total(user_inputs)
+
+    period = user_inputs["실천기간"]
+
+    result["electric"] *= period
+    result["replacement"] *= period
+    result["recycle"] *= period
+    result["total"] *= period
+
+    st.session_state["result"] = result
 
     st.switch_page("pages/result.py")

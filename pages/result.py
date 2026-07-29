@@ -3,15 +3,49 @@ import streamlit as st
 st.title("🌱 탄소 절감 결과")
 
 
-if "total" in st.session_state:
+if "result" not in st.session_state:
+    st.warning("먼저 탄소 절감량을 계산해주세요.")
+    st.stop()
 
-    total = st.session_state["total"]
 
+result = st.session_state["result"]
+
+
+total = result["total"]
+electric = result["electric"]
+replacement = result["replacement"]
+recycle = result["recycle"]
+
+
+st.metric(
+    label="총 탄소 절감량",
+    value=f"{total:.2f} kgCO₂"
+)
+
+
+st.divider()
+
+
+st.subheader("분야별 절감량")
+
+
+col1, col2, col3 = st.columns(3)
+
+
+with col1:
     st.metric(
-        "총 탄소 절감량",
-        f"{total*1000:.2f} kgCO₂"
+        "⚡ 전기 절약",
+        f"{electric:.2f} kgCO₂"
     )
 
-else:
+with col2:
+    st.metric(
+        "🍚 식사·이동 변화",
+        f"{replacement:.2f} kgCO₂"
+    )
 
-    st.warning("계산 결과가 없습니다.")
+with col3:
+    st.metric(
+        "♻️ 재활용",
+        f"{recycle:.2f} kgCO₂"
+    )
