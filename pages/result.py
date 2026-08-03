@@ -57,3 +57,6 @@ with col3:
         "♻️ 재활용",
         f"{recycle:.2f} kgCO₂"
     )
+
+if st.button("🌳 절감 효과 확인", type="primary"):
+    st.switch_page("pages/effect.py")
