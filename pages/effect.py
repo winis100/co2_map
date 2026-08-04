@@ -49,12 +49,12 @@ with col1:
 
     if tree10 >= 1:
         st.image(
-            image_path1,
+            image_path2,
             use_container_width=True
         )
     else:
         st.image(
-            image_path2,
+            image_path1,
             use_container_width=True
         )
 
@@ -69,12 +69,12 @@ with col2:
 
     if tree40 >= 1:
         st.image(
-            image_path3,
+            image_path4,
             use_container_width=True
         )
     else:
         st.image(
-            image_path4,
+            image_path3,
             use_container_width=True
         )
 
