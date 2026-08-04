@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 
 st.title("🌳 탄소 절감 효과")
 
@@ -13,19 +14,73 @@ total = result["total"]
 tree10 = total / 1.4
 tree40 = total / 9.0
 
-st.write(
-    f"""
-이번 실천으로 절감한 **{total:.2f} kgCO₂**는
+base_path = os.path.dirname(os.path.dirname(__file__))
 
-🌱 **10임령 소나무 약 {tree10:.1f}그루**
-
-또는
-
-🌲 **40임령 소나무 약 {tree40:.1f}그루**
-
-가 1년 동안 흡수하는 이산화탄소와 비슷한 양입니다.
-"""
+image_path1 = os.path.join(
+    base_path,
+    "10years_one.png"
 )
 
-if st.button("← 결과 페이지로 돌아가기"):
-    st.switch_page("pages/result.py")
+image_path2 = os.path.join(
+    base_path,
+    "10years_multi.png"
+)
+
+image_path3 = os.path.join(
+    base_path,
+    "40years_one.png"
+)
+
+image_path4 = os.path.join(
+    base_path,
+    "40years_multi.png"
+)
+
+st.subheader("🌳 탄소 절감 효과")
+
+st.markdown(
+    f"이번 실천으로 절감한 **{total:.2f} kgCO₂**는\n\n"
+    "소나무의 연간 CO₂ 흡수량으로 환산하면 다음과 같습니다."
+)
+
+col1, col2 = st.columns(2)
+
+with col1:
+
+    if tree10 >= 1:
+        st.image(
+            image_path1,
+            use_container_width=True
+        )
+    else:
+        st.image(
+            image_path2,
+            use_container_width=True
+        )
+
+    st.markdown("### 🌱 10임령")
+    st.metric(
+        "환산 결과",
+        f"{tree10:.1f} 그루"
+    )
+    st.caption("연간 CO₂ 흡수량 기준")
+
+with col2:
+
+    if tree40 >= 1:
+        st.image(
+            image_path3,
+            use_container_width=True
+        )
+    else:
+        st.image(
+            image_path4,
+            use_container_width=True
+        )
+
+    st.markdown("### 🌲 40임령")
+    st.metric(
+        "환산 결과",
+        f"{tree40:.1f} 그루"
+    )
+    st.caption("연간 CO₂ 흡수량 기준")
