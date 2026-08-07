@@ -319,6 +319,33 @@ user_inputs["실천기간"] = st.number_input(
     step=1
 )
 
+st.info("이미 탄소 절감량을 계산하셨다면 바로 효과를 확인할 수 있습니다.")
+
+if "show_direct_input" not in st.session_state:
+    st.session_state.show_direct_input = False
+
+if st.button("📊 절감량만 입력하고 효과 보기"):
+    st.session_state.show_direct_input = True
+
+if st.session_state.show_direct_input:
+
+    total = st.number_input(
+        "절감량 (kgCO₂)",
+        min_value=0.0,
+        step=0.1
+    )
+
+    if st.button("효과 보기"):
+
+        st.session_state["result"] = {
+            "electric": 0,
+            "replacement": 0,
+            "recycle": 0,
+            "total": total
+        }
+
+        st.switch_page("pages/effect.py")
+
 if st.button("탄소절감량 계산"):
 
     result = calculate_total(user_inputs)
